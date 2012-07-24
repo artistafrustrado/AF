@@ -39,8 +39,8 @@ class AF_GridAction
 				{
 					if(array_key_exists($key, $this->__actions))
 					{
-						$act = str_replace('{[KEY]}', $key,$this->__actions[$key]->build());
-						$buffer .= "<td>{$act}</td>\n";
+						$act = str_replace('{[KEY]}', $value, $this->__actions[$key]->build());
+						$buffer .= "<td style='width: 85px;'>{$act}</td>\n";
 					}
 					else
 					{
