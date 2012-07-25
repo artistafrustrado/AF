@@ -1,7 +1,7 @@
 <?php
 
 
-class AF_Controller_Action extends Zend_Controller_Action
+class AF_Controller_ActionListMenu extends Zend_Controller_Action
 {
 	protected $_title;
 	protected $_listSql;
@@ -9,6 +9,7 @@ class AF_Controller_Action extends Zend_Controller_Action
 	protected $_dao;
 	protected $_fields;
 	protected $_redirectUrl = 'index';
+	protected $_menu;
 
 	protected $_buffer;
 
@@ -42,11 +43,28 @@ class AF_Controller_Action extends Zend_Controller_Action
 		$this->_redirectUrl = $ur;
 	}
 
+	public function setListMenu($menu, $span = 2)
+	{
+		$this->_menu = $menu;
+		$this->_menuSpan = $span;
+	}
+
 	public function init()
 	{
 		$header = new Twitterbootstrap_PageHeader($this->_title);
 		$this->view->buffer = $header->build();
 		$this->_helper->viewRenderer->setNoRender(true);
+	}
+
+	protected function _build($buffer)
+	{
+		$grid = new Twitterbootstrap_Grid();
+		$grid->setFluid();
+
+		$grid->addCell($this->_menu->build()->build(), $this->_menuSpan);
+		$grid->addCell($buffer, (12 - $this->_menuSpan));
+		$buffer = $grid->build();
+		echo $buffer;
 	}
 
 
@@ -71,7 +89,8 @@ class AF_Controller_Action extends Zend_Controller_Action
 		$grid->addAction('id', $drop);
 		$this->view->buffer .= $grid->build($this->_listSql);
 
-		echo $this->view->buffer;
+		$this->_build($this->view->buffer);
+		#echo $this->view->buffer;
 	}
 
 	public function insertAction()
@@ -97,7 +116,8 @@ class AF_Controller_Action extends Zend_Controller_Action
 			}
 		}
 
-		echo $this->view->buffer;
+		#echo $this->view->buffer;
+		$this->_build($this->view->buffer);
 
 	} 
 
@@ -126,7 +146,8 @@ class AF_Controller_Action extends Zend_Controller_Action
                 $this->_form->populate($data);
 
 		$this->view->buffer .= $this->_form;
-		echo $this->view->buffer;
+		#echo $this->view->buffer;
+		$this->_build($this->view->buffer);
 	}
 
 	public function deleteAction()
