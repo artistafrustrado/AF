@@ -58,13 +58,16 @@ class AF_Controller_ActionListMenu extends Zend_Controller_Action
 
 	protected function _build($buffer)
 	{
+		#$header = new Twitterbootstrap_PageHeader($this->_title);
+		#$buff = $header->build();
+		
 		$grid = new Twitterbootstrap_Grid();
-		$grid->setFluid();
+		#$grid->setFluid();
 
 		$grid->addCell($this->_menu->build()->build(), $this->_menuSpan);
 		$grid->addCell($buffer, (12 - $this->_menuSpan));
-		$buffer = $grid->build();
-		echo $buffer;
+		$buff = $grid->build();
+		echo $buff;
 	}
 
 
