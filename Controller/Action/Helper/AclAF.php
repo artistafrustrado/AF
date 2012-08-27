@@ -9,7 +9,7 @@ class AF_Controller_Action_Helper_AclAF extends Zend_Controller_Action_Helper_Ab
     public function __construct(Zend_View_Interface $view = null, array $options = array())
     {
         $this->_auth = Zend_Auth::getInstance();
-        $this->_acl = new AF_Acl_AFAcl();
+        $this->_acl = new Application_Model_ACL();
     }
 
     public function init()
@@ -70,16 +70,16 @@ class AF_Controller_Action_Helper_AclAF extends Zend_Controller_Action_Helper_Ab
                 if(!$this->_auth->hasIdentity())
                 {
                         $request->setModuleName('default');
-                        $request->setControllerName('Autenticacao');
+                        $request->setControllerName('Auth');
                         $request->setActionName('login');
-                        $redirector->gotoSimple('login', 'Autenticacao', 'default');
+                        $redirector->gotoSimple('login', 'Auth', 'default');
                 }
                 else
                 {
                         $request->setModuleName('default');
-                        $request->setControllerName('Autenticacao');
+                        $request->setControllerName('Auth');
                         $request->setActionName('noperms');
-                        $redirector->gotoSimple('noperms', 'Autenticacao', 'default');
+                        $redirector->gotoSimple('noperms', 'Auth', 'default');
                 }
         }
     }

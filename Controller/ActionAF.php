@@ -1,10 +1,11 @@
 <?php
 
 
-class AF_Controller_Action extends Zend_Controller_Action
+class AF_Controller_ActionAF extends Zend_Controller_Action
 {
 	protected $_title;
 	protected $_listSql;
+	protected $_listSqlSearch;
 	protected $_form;
 	protected $_dao;
 	protected $_fields;
@@ -20,6 +21,11 @@ class AF_Controller_Action extends Zend_Controller_Action
 	public function setListQuery($sql)
 	{
 		$this->_listSql = $sql;
+	}
+
+	public function setListQuerySearch($sql)
+	{
+		$this->_listSqlSearch = $sql;
 	}
 
 	public function setForm($form)
@@ -77,15 +83,30 @@ class AF_Controller_Action extends Zend_Controller_Action
 		$this->view->buffer .= '<br/><br/>';
 
 
-		$drop = new Twitterbootstrap_Button_Dropdown('ações');
-		$drop->addAction('Alterar','update_{[KEY]}',"/{$module}/{$controller}/update/id/{[KEY]}");
-		$drop->addAction('Arquivar','archive_{[KEY]}',"/{$module}/{$controller}/archive/id/{[KEY]}");
-		$drop->addDivider();
-		$drop->addAction('Apagar','del_{[KEY]}',"/{$module}/{$controller}/delete/id/{[KEY]}");
+		$sql = $this->_listSql;
+		if($this->_request->isPost())
+		{
+			$term = $this->_request->getParam('bootstrap-search');
+			$sql = str_replace('{[SEARCH-STRING]}', $term ,$this->_listSqlSearch);
+		}
 
-		$grid = new AF_GridAction();
-		$grid->addAction('id', $drop);
-		$this->view->buffer .= $grid->build($this->_listSql);
+
+		#$drop = new Twitterbootstrap_Button_Dropdown('ações');
+		#$drop->addAction('Alterar','update_{[KEY]}',"/{$module}/{$controller}/update/id/{[KEY]}");
+		#$drop->addAction('Arquivar','archive_{[KEY]}',"/{$module}/{$controller}/archive/id/{[KEY]}");
+		#$drop->addDivider();
+		#$drop->addAction('Apagar','del_{[KEY]}',"/{$module}/{$controller}/delete/id/{[KEY]}");
+	
+		$items = "<a href=\"/{$module}/{$controller}/edit/id/{[KEY]}\" class=\"btn\"><i class=\"icon-edit\"></i> editar</a>";
+		$items .= "<a href=\"/{$module}/{$controller}/delete/id/{[KEY]}\" class=\"btn\"><i class=\"icon-trash\"></i> apagar</a>";
+
+		$items = "<a href=\"/{$module}/{$controller}/update/id/{[KEY]}\" class=\"btn\" rel=\"tooltip\" title=\"editar\"><i class=\"icon-edit\"></i></a>";
+		$items .= "<a href=\"/{$module}/{$controller}/delete/id/{[KEY]}\" class=\"btn\" rel=\"tooltip\" title=\"apagar\"><i class=\"icon-trash\"></i></a>";
+	
+		$grid = new AF_GridActionAF();
+		$grid->addAction('id', $items);
+		#$this->view->buffer .= $grid->build($this->_listSql);
+		$this->view->buffer .= $grid->build($sql);
 
 		echo $this->view->buffer;
 	}

@@ -13,6 +13,24 @@ class AF_Controller_ActionListMenu extends Zend_Controller_Action
 
 	protected $_buffer;
 
+
+	public function setUserActions($role='user', $actions=Null)
+	{
+		if(is_null($actions))
+		{
+			$actions = array(
+					'index',
+					'insert',
+					'update',
+					'delete'
+					);
+
+		}
+
+		$this->_helper->_aclAF->allow($role, $actions);
+	}
+
+
 	public function setTitle($title)
 	{
 		$this->_title = $title;
@@ -58,11 +76,11 @@ class AF_Controller_ActionListMenu extends Zend_Controller_Action
 
 	protected function _build($buffer)
 	{
-		#$header = new Twitterbootstrap_PageHeader($this->_title);
-		#$buff = $header->build();
-		
+#$header = new Twitterbootstrap_PageHeader($this->_title);
+#$buff = $header->build();
+
 		$grid = new Twitterbootstrap_Grid();
-		#$grid->setFluid();
+#$grid->setFluid();
 
 		$grid->addCell($this->_menu->build()->build(), $this->_menuSpan);
 		$grid->addCell($buffer, (12 - $this->_menuSpan));
@@ -76,7 +94,7 @@ class AF_Controller_ActionListMenu extends Zend_Controller_Action
 		$controller 	= $this->_request->getControllerName();
 		$module 	= $this->_request->getModuleName();
 
-		
+
 		$title = strtolower($this->_title);
 		$this->view->buffer .= "<a href=\"/{$module}/{$controller}/insert\" class=\"btn\"><i class=\"icon-plus-sign\"></i> adicionar {$title}</a>";
 		$this->view->buffer .= '<br/><br/>';
@@ -93,7 +111,7 @@ class AF_Controller_ActionListMenu extends Zend_Controller_Action
 		$this->view->buffer .= $grid->build($this->_listSql);
 
 		$this->_build($this->view->buffer);
-		#echo $this->view->buffer;
+#echo $this->view->buffer;
 	}
 
 	public function insertAction()
@@ -115,11 +133,11 @@ class AF_Controller_ActionListMenu extends Zend_Controller_Action
 			}
 			else
 			{
-                		$this->_form->populate($this->_request->getPost());
+				$this->_form->populate($this->_request->getPost());
 			}
 		}
 
-		#echo $this->view->buffer;
+#echo $this->view->buffer;
 		$this->_build($this->view->buffer);
 
 	} 
@@ -142,26 +160,26 @@ class AF_Controller_ActionListMenu extends Zend_Controller_Action
 			}
 		}
 
-                $data = $this->_dao->find($this->_request->getParam('id'));
-                $data = $data->toArray();
-                $data = $data[0];
+		$data = $this->_dao->find($this->_request->getParam('id'));
+		$data = $data->toArray();
+		$data = $data[0];
 
-                $this->_form->populate($data);
+		$this->_form->populate($data);
 
 		$this->view->buffer .= $this->_form;
-		#echo $this->view->buffer;
+#echo $this->view->buffer;
 		$this->_build($this->view->buffer);
 	}
 
 	public function deleteAction()
 	{
-			$data = array('active' => 1);
-                        $where = "id = " . $this->_request->getParam('id');
-                        #$data_object->Update($data, $where); 
-                        $this->_dao->Delete($where);
-                        #delete($where);        
-                        #return $controller->goToUrl($this->_redirectUrl);
-			return $this->_helper->redirector($this->_redirectUrl);
+		$data = array('active' => 1);
+		$where = "id = " . $this->_request->getParam('id');
+#$data_object->Update($data, $where); 
+		$this->_dao->Delete($where);
+#delete($where);        
+#return $controller->goToUrl($this->_redirectUrl);
+		return $this->_helper->redirector($this->_redirectUrl);
 
 	}
 
