@@ -79,17 +79,38 @@ class AF_Gallery
 			foreach($rows as $row)
 			{
 				$text  = '<div style="text-align: center;">';
+				$text .= $row['title']."<br/><br/>\n";
 				$text .= "<a href=\"/{$module}/{$controller}/delete/id/{$row['id']}/id_program/{$id_program}\" class=\"btn btn-mini btn-danger\" style='float:center;'><i class='icon-trash icon-white'></i> apagar</a>\n";
-				$text .= "<a href=\"/{$module}/{$controller}/edit/id/{$row['id']}/id_program/{$id_program}\" class=\"btn btn-mini btn-primary\" style='float:center;'><i class='icon-file icon-white'></i> editar</a>\n";
-				#$text .= "<a href=\"/{$module}/{$controller}/delete/id/{$row['id']}/id_program/{$id_program}\" class=\"btn\" style='float:center;'><i class='icon-trash'></i> apagar</a>";
+				$text .= "<a  href=\"#\" url=\"/Admin/Program-Picture/geteditform/id_program/1/id/{$row['id']}\" class=\"btn btn-mini btn-primary program-picture\"><i class='icon-file icon-white'></i> editar</a>\n";
 				$text .= '</div>';
-				$grid->addImage("/media/program/images/{$id_program}/thumb/{$row['name']}", $row['name'], "/media/program/images/{$id_program}/thumb/{$row['name']}", '', $text);
+				$grid->addImage("{$row['path']}", $row['name'], "{$row['path']}", '', $text);
 
 			}
-
 		}
 
-		$buffer = $grid->build();
+		$buffer = ''; 
+		$buffer .= $this->getModal();
+		$buffer .= $grid->build();
+
+		return $buffer;
+	}
+
+	public function getModal()
+	{
+		$buffer = "<div class=\"modal hide fade\" id=\"ProgramPictureModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"ProgramPictureModalLabel\" aria-hidden=\"true\"> \n";
+		$buffer .= "  <div class=\"modal-header\"> \n";
+		$buffer .= "    <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\">×</button> \n";
+		$buffer .= "    <h3 id=\"ProgramPictureModalLabel\">Foto de Programa</h3> \n";
+		$buffer .= "  </div> \n";
+		$buffer .= "  <div class=\"modal-body\" id=\"modal-body\"> \n";
+		$buffer .= "    <p>One fine body…</p> \n";
+		$buffer .= "  </div> \n";
+		$buffer .= "  <div class=\"modal-footer\"> \n";
+		$buffer .= "    <button class=\"btn\" data-dismiss=\"modal\" aria-hidden=\"true\">fechar</button> \n";
+		$buffer .= "    <button class=\"btn btn-primary\" id=\"program-picture-modal-save\">salvar</button> \n";
+		$buffer .= "  </div> \n";
+		$buffer .= "</div> \n";
+
 		return $buffer;
 	}
 
