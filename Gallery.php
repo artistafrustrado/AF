@@ -111,6 +111,17 @@ class AF_Gallery
 		$buffer .= "  </div> \n";
 		$buffer .= "</div> \n";
 
+				$text .= "<a href=\"/{$module}/{$controller}/delete/id/{$row['id']}/id_program/{$id_program}\" class=\"btn btn-mini btn-danger\" style='float:center;'><i class='icon-trash icon-white'></i> apagar</a>\n";
+				$text .= "<a href=\"/{$module}/{$controller}/edit/id/{$row['id']}/id_program/{$id_program}\" class=\"btn btn-mini btn-primary\" style='float:center;'><i class='icon-file icon-white'></i> editar</a>\n";
+				#$text .= "<a href=\"/{$module}/{$controller}/delete/id/{$row['id']}/id_program/{$id_program}\" class=\"btn\" style='float:center;'><i class='icon-trash'></i> apagar</a>";
+				$text .= '</div>';
+				$grid->addImage("/media/program/images/{$id_program}/thumb/{$row['name']}", $row['name'], "/media/program/images/{$id_program}/thumb/{$row['name']}", '', $text);
+
+			}
+
+		}
+
+		$buffer = $grid->build();
 		return $buffer;
 	}
 
